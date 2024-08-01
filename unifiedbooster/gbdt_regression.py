@@ -43,12 +43,13 @@ class GBDTRegressor(BaseEstimator, RegressorMixin):
                 **kwargs
             }
         elif self.model_type == "lightgbm":
+             verbose = self.verbosity - 1 if self.verbosity==0 else self.verbosity
              self.params = {
                 'num_iterations': self.n_estimators,
                 'learning_rate': self.learning_rate,
                 'bagging_fraction': self.subsample,
                 'max_depth': self.max_depth,
-                'verbose': self.verbosity - 1 if self.verbosity==0 else self.verbosity
+                'verbose': verbose,
                 **kwargs
             }
         elif self.model_type == "catboost":
@@ -57,7 +58,7 @@ class GBDTRegressor(BaseEstimator, RegressorMixin):
                 'learning_rate': self.learning_rate,
                 'rsm': self.subsample,
                 'depth': self.max_depth,
-                'verbose': self.verbosity
+                'verbose': self.verbosity,
                 **kwargs
             }           
         
