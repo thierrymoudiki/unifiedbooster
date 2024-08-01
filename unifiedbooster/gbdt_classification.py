@@ -24,7 +24,7 @@ class GBDTClassifier(BaseEstimator, ClassifierMixin):
         # subsample
         # max_depth
         # lightgbm -----
-        # num_iterations
+        # n_estimators
         # learning_rate
         # bagging_fraction
         # max_depth        
@@ -45,7 +45,7 @@ class GBDTClassifier(BaseEstimator, ClassifierMixin):
         elif self.model_type == "lightgbm":
              verbose = self.verbosity - 1 if self.verbosity==0 else self.verbosity
              self.params = {
-                'num_iterations': self.n_estimators,
+                'n_estimators': self.n_estimators,
                 'learning_rate': self.learning_rate,
                 'bagging_fraction': self.subsample,
                 'max_depth': self.max_depth,
@@ -65,7 +65,7 @@ class GBDTClassifier(BaseEstimator, ClassifierMixin):
         if model_type == 'xgboost':
             self.model = XGBClassifier(**self.params)
         elif model_type == 'catboost':            
-            self.model = CatBoostClassifier(**self.params, logging_level='Silent')
+            self.model = CatBoostClassifier(**self.params)
         elif model_type == 'lightgbm':
             self.model = LGBMClassifier(**self.params)
         else:
