@@ -10,7 +10,7 @@ from os import path
 
 subprocess.check_call(['pip', 'install', 'Cython'])
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 here = path.abspath(path.dirname(__file__))
 
@@ -44,7 +44,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Call R functions from Python",
+    description="Unified interface for Gradient Boosted Decision Trees",
     entry_points={
         'console_scripts': [
             'unifiedbooster=unifiedbooster.cli:main',
