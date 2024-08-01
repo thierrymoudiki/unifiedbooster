@@ -9,13 +9,15 @@ class GBDTRegressor(BaseEstimator, RegressorMixin):
                  n_estimators=100, 
                  learning_rate=0.1, 
                  max_depth=3, 
-                 subsample=1.0,                  
+                 subsample=1.0,    
+                 verbosity=0,              
                  **kwargs):
         self.model_type = model_type
         self.n_estimators = n_estimators
         self.learning_rate = learning_rate
         self.max_depth = max_depth
         self.subsample = subsample
+        self.verbosity = verbosity
         # xgboost -----
         # n_estimators        
         # learning_rate
@@ -37,6 +39,7 @@ class GBDTRegressor(BaseEstimator, RegressorMixin):
                 'learning_rate': self.learning_rate,
                 'subsample': self.subsample,
                 'max_depth': self.max_depth,
+                'verbosity': self.verbosity,
                 **kwargs
             }
         elif self.model_type == "lightgbm":
@@ -45,6 +48,7 @@ class GBDTRegressor(BaseEstimator, RegressorMixin):
                 'learning_rate': self.learning_rate,
                 'bagging_fraction': self.subsample,
                 'max_depth': self.max_depth,
+                'verbose': self.verbosity - 1 if self.verbosity==0 else self.verbosity
                 **kwargs
             }
         elif self.model_type == "catboost":
@@ -53,13 +57,14 @@ class GBDTRegressor(BaseEstimator, RegressorMixin):
                 'learning_rate': self.learning_rate,
                 'rsm': self.subsample,
                 'depth': self.max_depth,
+                'verbose': self.verbosity
                 **kwargs
             }           
         
         if model_type == 'xgboost':
             self.model = XGBRegressor(**self.params)
         elif model_type == 'catboost':            
-            self.model = CatBoostRegressor(**self.params)
+            self.model = CatBoostRegressor(**self.params, logging_level='Silent')
         elif model_type == 'lightgbm':
             self.model = LGBMRegressor(**self.params)
         else:
