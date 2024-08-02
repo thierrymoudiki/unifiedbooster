@@ -55,16 +55,16 @@ coverage: ## check code coverage quickly with the default Python
 
 docs: install ## generate docs		
 	pip install black pdoc 
-	black nnetsauce/* --line-length=80	
-	find nnetsauce/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
-	pdoc -t docs nnetsauce/* --output-dir nnetsauce-docs
+	black unifiedbooster/* --line-length=80	
+	find unifiedbooster/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
+	pdoc -t docs unifiedbooster/* --output-dir unifiedbooster-docs
 	find . -name '__pycache__' -exec rm -fr {} +
 
 servedocs: install ## compile the docs watching for change	 	
 	pip install black pdoc 
-	black nnetsauce/* --line-length=80	
-	find nnetsauce/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
-	pdoc -t docs nnetsauce/* 
+	black unifiedbooster/* --line-length=80	
+	find unifiedbooster/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
+	pdoc -t docs unifiedbooster/* 
 	find . -name '__pycache__' -exec rm -fr {} +
 
 build-site: docs ## export mkdocs website to a folder		

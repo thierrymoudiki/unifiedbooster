@@ -55,6 +55,7 @@ class GBDT(BaseEstimator):
                 'depth': self.max_depth, 
                 'verbose': self.verbose,
                 'random_seed': self.seed, 
+                'bootstrap_type': 'Bernoulli',
                 **kwargs
             }           
         
