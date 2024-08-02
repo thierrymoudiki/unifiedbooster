@@ -32,6 +32,9 @@ class GBDTRegressor(GBDT, RegressorMixin):
         seed: int
             reproducibility seed
 
+        **kwargs: dict
+            additional parameters to be passed to the class
+
     Examples:
 
     ```python

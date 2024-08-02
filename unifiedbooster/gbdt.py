@@ -24,6 +24,9 @@ class GBDT(BaseEstimator):
 
         seed: int
             reproducibility seed
+
+        **kwargs: dict
+            additional parameters to be passed to the class
     """
 
     def __init__(
