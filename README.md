@@ -1,5 +1,7 @@
 # unifiedbooster
 
+Unified interface for Gradient Boosted Decision Trees algorithms
+
 ![PyPI](https://img.shields.io/pypi/v/unifiedbooster) [![PyPI - License](https://img.shields.io/pypi/l/unifiedbooster)](https://github.com/thierrymoudiki/unifiedbooster/blob/main/LICENSE) [![Downloads](https://pepy.tech/badge/unifiedbooster)](https://pepy.tech/project/unifiedbooster) 
 [![Documentation](https://img.shields.io/badge/documentation-is_here-green)](https://techtonique.github.io/unifiedbooster/)
 
