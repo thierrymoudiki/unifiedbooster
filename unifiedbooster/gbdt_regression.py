@@ -1,7 +1,11 @@
 from .gbdt import GBDT
 from sklearn.base import RegressorMixin
 from xgboost import XGBRegressor
-from catboost import CatBoostRegressor
+
+try:
+    from catboost import CatBoostRegressor
+except:
+    print("catboost package can't be built")
 from lightgbm import LGBMRegressor
 
 
@@ -11,7 +15,7 @@ class GBDTRegressor(GBDT, RegressorMixin):
     Attributes:
 
         n_estimators: int
-            maximum number of trees that can be built 
+            maximum number of trees that can be built
 
         learning_rate: float
             shrinkage rate; used for reducing the gradient step
@@ -24,9 +28,9 @@ class GBDTRegressor(GBDT, RegressorMixin):
 
         verbose: int
             controls verbosity (default=0)
-        
-        seed: int 
-            reproducibility seed 
+
+        seed: int
+            reproducibility seed
 
     Examples:
 
@@ -68,36 +72,38 @@ class GBDTRegressor(GBDT, RegressorMixin):
     ```
     """
 
-    def __init__(self, 
-                 model_type='xgboost', 
-                 n_estimators=100, 
-                 learning_rate=0.1, 
-                 max_depth=3, 
-                 rowsample=1.0,
-                 colsample=1.0,    
-                 verbose=0,    
-                 seed=123,          
-                 **kwargs):
-        
+    def __init__(
+        self,
+        model_type="xgboost",
+        n_estimators=100,
+        learning_rate=0.1,
+        max_depth=3,
+        rowsample=1.0,
+        colsample=1.0,
+        verbose=0,
+        seed=123,
+        **kwargs,
+    ):
+
         self.type_fit = "regression"
-                        
+
         super().__init__(
-            model_type=model_type, 
-            n_estimators=n_estimators, 
-            learning_rate=learning_rate, 
-            max_depth=max_depth, 
+            model_type=model_type,
+            n_estimators=n_estimators,
+            learning_rate=learning_rate,
+            max_depth=max_depth,
             rowsample=rowsample,
-            colsample=colsample,    
-            verbose=verbose,    
-            seed=seed,          
-            **kwargs
+            colsample=colsample,
+            verbose=verbose,
+            seed=seed,
+            **kwargs,
         )
 
-        if model_type == 'xgboost':
+        if model_type == "xgboost":
             self.model = XGBRegressor(**self.params)
-        elif model_type == 'catboost':            
+        elif model_type == "catboost":
             self.model = CatBoostRegressor(**self.params)
-        elif model_type == 'lightgbm':
+        elif model_type == "lightgbm":
             self.model = LGBMRegressor(**self.params)
         else:
             raise ValueError(f"Unknown model_type: {model_type}")

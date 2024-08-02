@@ -1,7 +1,11 @@
 from .gbdt import GBDT
 from sklearn.base import ClassifierMixin
 from xgboost import XGBClassifier
-from catboost import CatBoostClassifier
+
+try:
+    from catboost import CatBoostClassifier
+except:
+    print("catboost package can't be built")
 from lightgbm import LGBMClassifier
 
 
@@ -11,7 +15,7 @@ class GBDTClassifier(GBDT, ClassifierMixin):
     Attributes:
 
         n_estimators: int
-            maximum number of trees that can be built 
+            maximum number of trees that can be built
 
         learning_rate: float
             shrinkage rate; used for reducing the gradient step
@@ -24,9 +28,9 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
         verbose: int
             controls verbosity (default=0)
-        
-        seed: int 
-            reproducibility seed 
+
+        seed: int
+            reproducibility seed
 
     Examples:
 
@@ -68,39 +72,57 @@ class GBDTClassifier(GBDT, ClassifierMixin):
     ```
     """
 
-    def __init__(self, 
-                 model_type='xgboost', 
-                 n_estimators=100, 
-                 learning_rate=0.1, 
-                 max_depth=3, 
-                 rowsample=1.0,  
-                 colsample=1.0,
-                 verbose=0,
-                 seed=123,
-                 **kwargs):
-        
+    def __init__(
+        self,
+        model_type="xgboost",
+        n_estimators=100,
+        learning_rate=0.1,
+        max_depth=3,
+        rowsample=1.0,
+        colsample=1.0,
+        verbose=0,
+        seed=123,
+        **kwargs,
+    ):
+
         self.type_fit = "classification"
-                        
+
         super().__init__(
-            model_type=model_type, 
-            n_estimators=n_estimators, 
-            learning_rate=learning_rate, 
-            max_depth=max_depth, 
+            model_type=model_type,
+            n_estimators=n_estimators,
+            learning_rate=learning_rate,
+            max_depth=max_depth,
             rowsample=rowsample,
-            colsample=colsample,    
-            verbose=verbose,    
-            seed=seed,          
-            **kwargs
+            colsample=colsample,
+            verbose=verbose,
+            seed=seed,
+            **kwargs,
         )
 
-        if model_type == 'xgboost':
+        if model_type == "xgboost":
             self.model = XGBClassifier(**self.params)
-        elif model_type == 'catboost':            
+        elif model_type == "catboost":
             self.model = CatBoostClassifier(**self.params)
-        elif model_type == 'lightgbm':
+        elif model_type == "lightgbm":
             self.model = LGBMClassifier(**self.params)
         else:
             raise ValueError(f"Unknown model_type: {model_type}")
-            
+
     def predict_proba(self, X):
+        """Predict probabilities for test data X.
+
+        Args:
+
+            X: {array-like}, shape = [n_samples, n_features]
+                Training vectors, where n_samples is the number
+                of samples and n_features is the number of features.
+
+            **kwargs: additional parameters to be passed to
+                    self.cook_test_set
+
+        Returns:
+
+            probability estimates for test data: {array-like}
+        """
+
         return self.model.predict_proba(X)
