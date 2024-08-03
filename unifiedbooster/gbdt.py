@@ -16,6 +16,9 @@ class GBDT(BaseEstimator):
 
         learning_rate: float
             shrinkage rate; used for reducing the gradient step
+        
+        max_depth: int 
+            maximum tree depth
 
         rowsample: float
             subsample ratio of the training instances
