@@ -11,10 +11,10 @@ X, y = housing.data, housing.target
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Initialize the unified regr (example with XGBoost)
-regr1 = ub.GBDTregr(model_type='xgboost')
-#regr2 = ub.GBDTregr(model_type='catboost')
-regr3 = ub.GBDTregr(model_type='lightgbm')
-regr4 = ub.GBDTregr(model_type='gradientboosting', 
+regr1 = ub.GBDTRegressor(model_type='xgboost')
+#regr2 = ub.GBDTRegressor(model_type='catboost')
+regr3 = ub.GBDTRegressor(model_type='lightgbm')
+regr4 = ub.GBDTRegressor(model_type='gradientboosting', 
                     colsample=0.9)
 
 # Fit the model
