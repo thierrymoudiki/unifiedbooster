@@ -7,6 +7,10 @@ class GBDT(BaseEstimator):
 
     Attributes:
 
+        model_type: str
+            type of gradient boosting algorithm: 'xgboost', 'lightgbm', 
+            'catboost', 'gradientboosting'
+
         n_estimators: int
             maximum number of trees that can be built
 
@@ -86,6 +90,17 @@ class GBDT(BaseEstimator):
                 "bootstrap_type": "Bernoulli",
                 **kwargs,
             }
+        elif self.model_type == "gradientboosting":
+            self.params = {
+                "n_estimators": self.n_estimators,
+                "learning_rate": self.learning_rate,
+                "subsample": self.rowsample,
+                "max_features": self.colsample,
+                "max_depth": self.max_depth,
+                "verbose": self.verbose,
+                "random_state": self.seed,
+                **kwargs,
+            }
 
     def fit(self, X, y, **kwargs):
         """Fit custom model to training data (X, y).
@@ -112,6 +127,8 @@ class GBDT(BaseEstimator):
             self.n_classes_ = len(
                 self.classes_
             )  # for compatibility with sklearn
+        if getattr(self, "model_type") == "gradientboosting":
+            setattr(self, "model").max_features *= X.shape[1] 
         return getattr(self, "model").fit(X, y, **kwargs)
 
     def predict(self, X):

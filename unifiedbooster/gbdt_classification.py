@@ -1,18 +1,22 @@
 from .gbdt import GBDT
 from sklearn.base import ClassifierMixin
 from xgboost import XGBClassifier
-
 try:
     from catboost import CatBoostClassifier
 except:
     print("catboost package can't be built")
 from lightgbm import LGBMClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 
 class GBDTClassifier(GBDT, ClassifierMixin):
     """GBDT Classification model
 
     Attributes:
+
+        model_type: str
+            type of gradient boosting algorithm: 'xgboost', 'lightgbm',
+            'catboost', 'gradientboosting'
 
         n_estimators: int
             maximum number of trees that can be built
@@ -108,6 +112,8 @@ class GBDTClassifier(GBDT, ClassifierMixin):
             self.model = CatBoostClassifier(**self.params)
         elif model_type == "lightgbm":
             self.model = LGBMClassifier(**self.params)
+        elif model_type == "gradientboosting":
+            self.model = GradientBoostingClassifier(**self.params)
         else:
             raise ValueError(f"Unknown model_type: {model_type}")
 

@@ -1,18 +1,22 @@
 from .gbdt import GBDT
 from sklearn.base import RegressorMixin
 from xgboost import XGBRegressor
-
 try:
     from catboost import CatBoostRegressor
 except:
     print("catboost package can't be built")
 from lightgbm import LGBMRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 
 
 class GBDTRegressor(GBDT, RegressorMixin):
     """GBDT Regression model
 
     Attributes:
+
+        model_type: str
+            type of gradient boosting algorithm: 'xgboost', 'lightgbm', 
+            'catboost', 'gradientboosting'
 
         n_estimators: int
             maximum number of trees that can be built
@@ -108,5 +112,7 @@ class GBDTRegressor(GBDT, RegressorMixin):
             self.model = CatBoostRegressor(**self.params)
         elif model_type == "lightgbm":
             self.model = LGBMRegressor(**self.params)
+        elif model_type == "gradientboosting":
+            self.model = GradientBoostingRegressor(**self.params)
         else:
             raise ValueError(f"Unknown model_type: {model_type}")
