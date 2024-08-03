@@ -8,7 +8,7 @@ class GBDT(BaseEstimator):
     Attributes:
 
         model_type: str
-            type of gradient boosting algorithm: 'xgboost', 'lightgbm', 
+            type of gradient boosting algorithm: 'xgboost', 'lightgbm',
             'catboost', 'gradientboosting'
 
         n_estimators: int
@@ -128,7 +128,7 @@ class GBDT(BaseEstimator):
                 self.classes_
             )  # for compatibility with sklearn
         if getattr(self, "model_type") == "gradientboosting":
-            self.model.max_features = int(self.model.max_features*X.shape[1])
+            self.model.max_features = int(self.model.max_features * X.shape[1])
         return getattr(self, "model").fit(X, y, **kwargs)
 
     def predict(self, X):

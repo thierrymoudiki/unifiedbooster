@@ -1,6 +1,7 @@
 from .gbdt import GBDT
 from sklearn.base import RegressorMixin
 from xgboost import XGBRegressor
+
 try:
     from catboost import CatBoostRegressor
 except:
@@ -15,7 +16,7 @@ class GBDTRegressor(GBDT, RegressorMixin):
     Attributes:
 
         model_type: str
-            type of gradient boosting algorithm: 'xgboost', 'lightgbm', 
+            type of gradient boosting algorithm: 'xgboost', 'lightgbm',
             'catboost', 'gradientboosting'
 
         n_estimators: int

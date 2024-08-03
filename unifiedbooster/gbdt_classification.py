@@ -1,6 +1,7 @@
 from .gbdt import GBDT
 from sklearn.base import ClassifierMixin
 from xgboost import XGBClassifier
+
 try:
     from catboost import CatBoostClassifier
 except:
