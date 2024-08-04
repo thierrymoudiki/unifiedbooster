@@ -1,12 +1,17 @@
 from .gbdt import GBDT
 from sklearn.base import ClassifierMixin
-from xgboost import XGBClassifier
-
+try:
+    from xgboost import XGBClassifier
+except: 
+    pass 
 try:
     from catboost import CatBoostClassifier
 except:
-    print("catboost package can't be built")
-from lightgbm import LGBMClassifier
+    pass
+try: 
+    from lightgbm import LGBMClassifier
+except:
+    pass 
 from sklearn.ensemble import GradientBoostingClassifier
 
 
@@ -24,8 +29,8 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
         learning_rate: float
             shrinkage rate; used for reducing the gradient step
-        
-        max_depth: int 
+
+        max_depth: int
             maximum tree depth
 
         rowsample: float

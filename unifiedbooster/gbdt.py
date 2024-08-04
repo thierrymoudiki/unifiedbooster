@@ -16,8 +16,8 @@ class GBDT(BaseEstimator):
 
         learning_rate: float
             shrinkage rate; used for reducing the gradient step
-        
-        max_depth: int 
+
+        max_depth: int
             maximum tree depth
 
         rowsample: float
@@ -90,7 +90,7 @@ class GBDT(BaseEstimator):
                 "depth": self.max_depth,
                 "verbose": self.verbose,
                 "random_seed": self.seed,
-                "bootstrap_type": "Bernoulli",
+                "bootstrap_type": "MVS",
                 **kwargs,
             }
         elif self.model_type == "gradientboosting":

@@ -1,12 +1,17 @@
 from .gbdt import GBDT
 from sklearn.base import RegressorMixin
-from xgboost import XGBRegressor
-
+try: 
+    from xgboost import XGBRegressor
+except:
+    pass 
 try:
     from catboost import CatBoostRegressor
 except:
-    print("catboost package can't be built")
-from lightgbm import LGBMRegressor
+    pass 
+try: 
+    from lightgbm import LGBMRegressor
+except:
+    pass 
 from sklearn.ensemble import GradientBoostingRegressor
 
 
@@ -24,8 +29,8 @@ class GBDTRegressor(GBDT, RegressorMixin):
 
         learning_rate: float
             shrinkage rate; used for reducing the gradient step
-        
-        max_depth: int 
+
+        max_depth: int
             maximum tree depth
 
         rowsample: float
