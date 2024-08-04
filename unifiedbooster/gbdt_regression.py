@@ -1,17 +1,18 @@
 from .gbdt import GBDT
 from sklearn.base import RegressorMixin
-try: 
+
+try:
     from xgboost import XGBRegressor
 except:
-    pass 
+    pass
 try:
     from catboost import CatBoostRegressor
 except:
-    pass 
-try: 
+    pass
+try:
     from lightgbm import LGBMRegressor
 except:
-    pass 
+    pass
 from sklearn.ensemble import GradientBoostingRegressor
 
 

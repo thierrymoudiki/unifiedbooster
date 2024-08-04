@@ -7,7 +7,7 @@ from sklearn.kernel_ridge import KernelRidge
 from sklearn.metrics import accuracy_score
 from time import time
 
-print(f"\n ----- Running: {os.path.basename(__file__)}... ----- \n")
+print(f"\n ----- Running: {os.path.basename(__file__)}... ----- \n")    
 
 dataset = load_breast_cancer()
 X, y = dataset.data, dataset.target

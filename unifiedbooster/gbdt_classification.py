@@ -1,17 +1,18 @@
 from .gbdt import GBDT
 from sklearn.base import ClassifierMixin
+
 try:
     from xgboost import XGBClassifier
-except: 
-    pass 
+except:
+    pass
 try:
     from catboost import CatBoostClassifier
 except:
     pass
-try: 
+try:
     from lightgbm import LGBMClassifier
 except:
-    pass 
+    pass
 from sklearn.ensemble import GradientBoostingClassifier
 
 

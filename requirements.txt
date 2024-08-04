@@ -5,3 +5,4 @@ xgboost
 lightgbm
 catboost
 GPopt
+nnetsauce 
