@@ -9,7 +9,7 @@ from os import path
 
 subprocess.check_call(['pip', 'install', 'Cython'])
 
-__version__ = "0.4.2"
+__version__ = "0.5.0"
 
 here = path.abspath(path.dirname(__file__))
 

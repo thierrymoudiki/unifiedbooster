@@ -90,7 +90,9 @@ class GBDT(BaseEstimator):
                 "depth": self.max_depth,
                 "verbose": self.verbose,
                 "random_seed": self.seed,
-                "bootstrap_type": "MVS",
+                "boosting_type": "Plain",
+                "leaf_estimation_iterations": 1,                
+                "bootstrap_type": "Bernoulli",
                 **kwargs,
             }
         elif self.model_type == "gradientboosting":
