@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: unifiedbooster
+Version: 0.5.0
+Summary: Unified interface for Gradient Boosted Decision Trees
+Home-page: https://github.com/thierrymoudiki/unifiedbooster
+Author: T. Moudiki
+Author-email: thierry.moudiki@gmail.com
+License: BSD license
+Keywords: unifiedbooster
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Python: >=3.6
+License-File: LICENSE
+Requires-Dist: Cython
+Requires-Dist: numpy
+Requires-Dist: scikit-learn
+Requires-Dist: xgboost
+Requires-Dist: lightgbm
+Requires-Dist: catboost
+Requires-Dist: GPopt
+Requires-Dist: nnetsauce
+
+Unified interface for Gradient Boosted Decision Trees
