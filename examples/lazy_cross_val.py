@@ -56,3 +56,25 @@ res4 = ub.lazy_cross_val_optim(
 print(f"Elapsed: {time()-start}")
 #print(res3)
 print(res4)
+
+
+start = time()
+res4 = ub.lazy_cross_val_optim(
+    X_train,
+    y_train,
+    X_test=X_test,
+    y_test=y_test,
+    model_type="lightgbm",
+    type_fit="classification",
+    scoring="accuracy",
+    cv=5,
+    n_jobs=None,
+    n_init=10,
+    n_iter=190,
+    abs_tol=1e-3,
+    seed=123,
+    customize=False
+)
+print(f"Elapsed: {time()-start}")
+#print(res3)
+print(res4)
