@@ -80,3 +80,45 @@ res3 = ub.cross_val_optim(
     seed=123,
 )
 print(res3)
+
+print("\n Example 4 -----")
+
+res2 = ub.cross_val_optim(
+    X_train,
+    y_train,
+    X_test=X_test,
+    y_test=y_test,
+    model_type="lightgbm",
+    type_fit="classification",
+    scoring="accuracy",
+    surrogate_obj=None,
+    cv=5,
+    n_jobs=None,
+    n_init=10,
+    n_iter=190,
+    abs_tol=1e-3,
+    verbose=2,
+    seed=123,
+)
+print(res2)
+
+print("\n Example 5 -----")
+
+res3 = ub.cross_val_optim(
+    X_train,
+    y_train,
+    X_test=X_test,
+    y_test=y_test,
+    model_type="lightgbm",
+    type_fit="classification",
+    scoring="accuracy",
+    surrogate_obj=KernelRidge(),
+    cv=5,
+    n_jobs=None,
+    n_init=10,
+    n_iter=190,
+    abs_tol=1e-3,
+    verbose=2,
+    seed=123,
+)
+print(res3)

@@ -18,7 +18,7 @@ def cross_val_optim(
     model_type="xgboost",
     type_fit="classification",
     scoring="accuracy",
-    n_estimators=100,
+    n_estimators=None,
     surrogate_obj=None,
     cv=5,
     n_jobs=None,
@@ -59,7 +59,7 @@ def cross_val_optim(
             scoring metric; see https://scikit-learn.org/stable/modules/model_evaluation.html#the-scoring-parameter-defining-model-evaluation-rules
 
         n_estimators: int
-            maximum number of trees that can be built
+            maximum number of trees that can be built (default is None, and if None, then the parameter is tuned)
 
         surrogate_obj: an object;
             An ML model for estimating the uncertainty around the objective function
@@ -168,63 +168,121 @@ def cross_val_optim(
         ).mean()
 
     # objective function for hyperparams tuning
-    def crossval_objective(xx):
-        return gbdt_cv(
-            X_train=X_train,
-            y_train=y_train,
-            model_type=model_type,
-            n_estimators=n_estimators,
-            learning_rate=10 ** xx[0],
-            max_depth=int(xx[1]),
-            rowsample=xx[2],
-            colsample=xx[3],
-            cv=cv,
-            n_jobs=n_jobs,
-            type_fit=type_fit,
-            scoring=scoring,
-            seed=seed,
-        )
+    if n_estimators is not None: 
+        def crossval_objective(xx):
+            return gbdt_cv(
+                X_train=X_train,
+                y_train=y_train,
+                model_type=model_type,
+                n_estimators=n_estimators,
+                learning_rate=10 ** xx[0],
+                max_depth=int(xx[1]),
+                rowsample=xx[2],
+                colsample=xx[3],
+                cv=cv,
+                n_jobs=n_jobs,
+                type_fit=type_fit,
+                scoring=scoring,
+                seed=seed,
+            )
+    else: # n_estimators is None
+        def crossval_objective(xx):
+            return gbdt_cv(
+                    X_train=X_train,
+                    y_train=y_train,
+                    model_type=model_type,
+                    n_estimators=int(10 ** xx[4]),
+                    learning_rate=10 ** xx[0],
+                    max_depth=int(xx[1]),
+                    rowsample=xx[2],
+                    colsample=xx[3],
+                    cv=cv,
+                    n_jobs=n_jobs,
+                    type_fit=type_fit,
+                    scoring=scoring,
+                    seed=seed,
+                )
 
-    if surrogate_obj is None:
-        gp_opt = gp.GPOpt(
-            objective_func=crossval_objective,
-            lower_bound=np.array([-6, 1, 0.5, 0.5]),
-            upper_bound=np.array([0, 16, 1.0, 1.0]),
-            params_names=[
-                "learning_rate",
-                "max_depth",
-                "rowsample",
-                "colsample",
-            ],
-            method="bayesian",
-            n_init=n_init,
-            n_iter=n_iter,
-            seed=seed,
-        )
-    else:
-        gp_opt = gp.GPOpt(
-            objective_func=crossval_objective,
-            lower_bound=np.array([-6, 1, 0.5, 0.5]),
-            upper_bound=np.array([0, 16, 1.0, 1.0]),
-            params_names=[
-                "learning_rate",
-                "max_depth",
-                "rowsample",
-                "colsample",
-            ],
-            acquisition="ucb",
-            method="splitconformal",
-            surrogate_obj=ns.PredictionInterval(
-                obj=surrogate_obj, method="splitconformal"
-            ),
-            n_init=n_init,
-            n_iter=n_iter,
-            seed=seed,
-        )
+    if n_estimators is not None: 
+        if surrogate_obj is None:
+            gp_opt = gp.GPOpt(
+                objective_func=crossval_objective,
+                lower_bound=np.array([-6, 1, 0.5, 0.5]),
+                upper_bound=np.array([0, 16, 1.0, 1.0]),
+                params_names=[
+                    "learning_rate",
+                    "max_depth",
+                    "rowsample",
+                    "colsample",
+                ],
+                method="bayesian",
+                n_init=n_init,
+                n_iter=n_iter,
+                seed=seed,
+            )
+        else:
+            gp_opt = gp.GPOpt(
+                objective_func=crossval_objective,
+                lower_bound=np.array([-6, 1, 0.5, 0.5]),
+                upper_bound=np.array([0, 16, 1.0, 1.0]),
+                params_names=[
+                    "learning_rate",
+                    "max_depth",
+                    "rowsample",
+                    "colsample",
+                ],
+                acquisition="ucb",
+                method="splitconformal",
+                surrogate_obj=ns.PredictionInterval(
+                    obj=surrogate_obj, method="splitconformal"
+                ),
+                n_init=n_init,
+                n_iter=n_iter,
+                seed=seed,
+            )
+    else: # n_estimators is None
+        if surrogate_obj is None:
+            gp_opt = gp.GPOpt(
+                objective_func=crossval_objective,
+                lower_bound=np.array([-6, 1, 0.5, 0.5, 2]),
+                upper_bound=np.array([0, 16, 1.0, 1.0, 3]),
+                params_names=[
+                    "learning_rate",
+                    "max_depth",
+                    "rowsample",
+                    "colsample",
+                    "n_estimators"
+                ],
+                method="bayesian",
+                n_init=n_init,
+                n_iter=n_iter,
+                seed=seed,
+            )
+        else:
+            gp_opt = gp.GPOpt(
+                objective_func=crossval_objective,
+                lower_bound=np.array([-6, 1, 0.5, 0.5, 2]),
+                upper_bound=np.array([0, 16, 1.0, 1.0, 3]),
+                params_names=[
+                    "learning_rate",
+                    "max_depth",
+                    "rowsample",
+                    "colsample",
+                    "n_estimators"
+                ],
+                acquisition="ucb",
+                method="splitconformal",
+                surrogate_obj=ns.PredictionInterval(
+                    obj=surrogate_obj, method="splitconformal"
+                ),
+                n_init=n_init,
+                n_iter=n_iter,
+                seed=seed,
+            )
 
     res = gp_opt.optimize(verbose=verbose, abs_tol=abs_tol)
     res.best_params["model_type"] = model_type
-    res.best_params["n_estimators"] = int(n_estimators)
+    res.best_params["n_estimators"] = int(n_estimators) if n_estimators is not None else int(10 ** res.best_params["n_estimators"])
     res.best_params["learning_rate"] = 10 ** res.best_params["learning_rate"]
     res.best_params["max_depth"] = int(res.best_params["max_depth"])
     res.best_params["rowsample"] = res.best_params["rowsample"]
@@ -256,7 +314,7 @@ def lazy_cross_val_optim(
     type_fit="classification",
     scoring="accuracy",
     customize=False,
-    n_estimators=100,
+    n_estimators=None,
     cv=5,
     n_jobs=None,
     n_init=10,
@@ -299,7 +357,7 @@ def lazy_cross_val_optim(
             if True, the surrogate is transformed into a quasi-randomized network (default is False)
             
         n_estimators: int
-            maximum number of trees that can be built
+            maximum number of trees that can be built (default is None, if None, the  parameters is tuned)
 
         cv: int;
             number of cross-validation folds
