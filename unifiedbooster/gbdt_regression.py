@@ -1,7 +1,7 @@
 from .gbdt import GBDT
 from sklearn.base import RegressorMixin
 from .predictioninterval import PredictionInterval
-from .nonconformist import IcpRegressor
+from .nonconformist import RegressorAdapter, IcpRegressor, RegressorNc, RegressorNormalizer, QuantileRegErrFunc
 
 try:
     from xgboost import XGBRegressor
