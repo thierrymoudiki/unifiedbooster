@@ -91,7 +91,7 @@ class GBDT(BaseEstimator):
                 "verbose": self.verbose,
                 "random_seed": self.seed,
                 "boosting_type": "Plain",
-                "leaf_estimation_iterations": 1,                
+                "leaf_estimation_iterations": 1,
                 "bootstrap_type": "Bernoulli",
                 **kwargs,
             }

@@ -1,5 +1,6 @@
 from .gbdt import GBDT
 from sklearn.base import ClassifierMixin
+from .nonconformist import IcpClassifier, TcpClassifier    
 
 try:
     from xgboost import XGBClassifier

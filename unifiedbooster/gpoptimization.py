@@ -168,7 +168,8 @@ def cross_val_optim(
         ).mean()
 
     # objective function for hyperparams tuning
-    if n_estimators is not None: 
+    if n_estimators is not None:
+
         def crossval_objective(xx):
             return gbdt_cv(
                 X_train=X_train,
@@ -185,25 +186,27 @@ def cross_val_optim(
                 scoring=scoring,
                 seed=seed,
             )
-    else: # n_estimators is None
+
+    else:  # n_estimators is None
+
         def crossval_objective(xx):
             return gbdt_cv(
-                    X_train=X_train,
-                    y_train=y_train,
-                    model_type=model_type,
-                    n_estimators=int(10 ** xx[4]),
-                    learning_rate=10 ** xx[0],
-                    max_depth=int(xx[1]),
-                    rowsample=xx[2],
-                    colsample=xx[3],
-                    cv=cv,
-                    n_jobs=n_jobs,
-                    type_fit=type_fit,
-                    scoring=scoring,
-                    seed=seed,
-                )
+                X_train=X_train,
+                y_train=y_train,
+                model_type=model_type,
+                n_estimators=int(10 ** xx[4]),
+                learning_rate=10 ** xx[0],
+                max_depth=int(xx[1]),
+                rowsample=xx[2],
+                colsample=xx[3],
+                cv=cv,
+                n_jobs=n_jobs,
+                type_fit=type_fit,
+                scoring=scoring,
+                seed=seed,
+            )
 
-    if n_estimators is not None: 
+    if n_estimators is not None:
         if surrogate_obj is None:
             gp_opt = gp.GPOpt(
                 objective_func=crossval_objective,
@@ -240,7 +243,7 @@ def cross_val_optim(
                 n_iter=n_iter,
                 seed=seed,
             )
-    else: # n_estimators is None
+    else:  # n_estimators is None
         if surrogate_obj is None:
             gp_opt = gp.GPOpt(
                 objective_func=crossval_objective,
@@ -251,7 +254,7 @@ def cross_val_optim(
                     "max_depth",
                     "rowsample",
                     "colsample",
-                    "n_estimators"
+                    "n_estimators",
                 ],
                 method="bayesian",
                 n_init=n_init,
@@ -268,7 +271,7 @@ def cross_val_optim(
                     "max_depth",
                     "rowsample",
                     "colsample",
-                    "n_estimators"
+                    "n_estimators",
                 ],
                 acquisition="ucb",
                 method="splitconformal",
@@ -282,7 +285,11 @@ def cross_val_optim(
 
     res = gp_opt.optimize(verbose=verbose, abs_tol=abs_tol)
     res.best_params["model_type"] = model_type
-    res.best_params["n_estimators"] = int(n_estimators) if n_estimators is not None else int(10 ** res.best_params["n_estimators"])
+    res.best_params["n_estimators"] = (
+        int(n_estimators)
+        if n_estimators is not None
+        else int(10 ** res.best_params["n_estimators"])
+    )
     res.best_params["learning_rate"] = 10 ** res.best_params["learning_rate"]
     res.best_params["max_depth"] = int(res.best_params["max_depth"])
     res.best_params["rowsample"] = res.best_params["rowsample"]
@@ -355,7 +362,7 @@ def lazy_cross_val_optim(
 
         customize: boolean
             if True, the surrogate is transformed into a quasi-randomized network (default is False)
-            
+
         n_estimators: int
             maximum number of trees that can be built (default is None, if None, the  parameters is tuned)
 
@@ -383,7 +390,7 @@ def lazy_cross_val_optim(
     Examples:
 
         ```python
-        import os 
+        import os
         import unifiedbooster as ub
         from sklearn.datasets import load_breast_cancer
         from sklearn.model_selection import train_test_split
@@ -454,7 +461,7 @@ def lazy_cross_val_optim(
                 if customize == True:
                     print(f"\n surrogate: CustomRegressor({est[0]})")
                     surr_obj = ns.CustomRegressor(obj=est[1]())
-                else: 
+                else:
                     print(f"\n surrogate: {est[0]}")
                     surr_obj = est[1]()
                 res = cross_val_optim(
@@ -479,7 +486,7 @@ def lazy_cross_val_optim(
                 if customize == True:
                     results.append((f"CustomRegressor({est[0]})", res))
                 else:
-                    results.append((est[0], res))                     
+                    results.append((est[0], res))
             except:
                 pass
 

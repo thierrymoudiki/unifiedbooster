@@ -27,4 +27,6 @@ __all__ = [
     "RegressorNc",
     "RegressorNormalizer",
     "IcpRegressor",
+    "IcpClassifier",
+    "TcpClassifier"
 ]
