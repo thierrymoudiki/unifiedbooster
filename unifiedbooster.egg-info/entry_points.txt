@@ -1,2 +1,0 @@
-[console_scripts]
-unifiedbooster = unifiedbooster.cli:main
