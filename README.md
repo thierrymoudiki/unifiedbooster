@@ -7,6 +7,8 @@ Unified interface for Gradient Boosted Decision Trees algorithms
 
 ## Examples 
 
+See also https://thierrymoudiki.github.io/blog/2024/08/05/python/r/unibooster
+
 ### classification 
 
 ```python
