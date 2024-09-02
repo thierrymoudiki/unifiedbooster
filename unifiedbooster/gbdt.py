@@ -35,7 +35,6 @@ class GBDT(BaseEstimator):
         **kwargs: dict
             additional parameters to be passed to the class
     """
-
     def __init__(
         self,
         model_type="xgboost",
@@ -44,6 +43,8 @@ class GBDT(BaseEstimator):
         max_depth=3,
         rowsample=1.0,
         colsample=1.0,
+        level=None,
+        pi_method=None,
         verbose=0,
         seed=123,
         **kwargs
@@ -55,6 +56,8 @@ class GBDT(BaseEstimator):
         self.max_depth = max_depth
         self.rowsample = rowsample
         self.colsample = colsample
+        self.level = level
+        self.pi_method = pi_method
         self.verbose = verbose
         self.seed = seed
 
@@ -126,7 +129,6 @@ class GBDT(BaseEstimator):
 
             self: object
         """
-
         if getattr(self, "type_fit") == "classification":
             self.classes_ = np.unique(y)  # for compatibility with sklearn
             self.n_classes_ = len(
@@ -152,5 +154,7 @@ class GBDT(BaseEstimator):
 
             model predictions: {array-like}
         """
-
-        return getattr(self, "model").predict(X)
+        if self.level is not None and self.type_fit == "regression":
+            return getattr(self, "model").predict(X, return_pi=True)
+        else:
+            return getattr(self, "model").predict(X)

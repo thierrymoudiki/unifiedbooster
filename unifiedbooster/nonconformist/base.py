@@ -9,7 +9,7 @@ docstring
 import abc
 import numpy as np
 
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
 
 
 class RegressorMixin(object):
@@ -102,15 +102,15 @@ class BaseModelAdapter(BaseEstimator):
         pass
 
 
-class ClassifierAdapter(BaseModelAdapter):
+class ClassifierAdapter(BaseModelAdapter, ClassifierMixin):
     def __init__(self, model, fit_params=None):
         super(ClassifierAdapter, self).__init__(model, fit_params)
 
     def _underlying_predict(self, x):
         return self.model.predict_proba(x)
+    
 
-
-class RegressorAdapter(BaseModelAdapter):
+class RegressorAdapter(BaseModelAdapter, RegressorMixin):
     def __init__(self, model, fit_params=None):
         super(RegressorAdapter, self).__init__(model, fit_params)
 

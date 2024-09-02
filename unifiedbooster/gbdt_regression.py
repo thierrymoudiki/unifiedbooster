@@ -1,7 +1,6 @@
 from .gbdt import GBDT
 from sklearn.base import RegressorMixin
 from .predictioninterval import PredictionInterval
-from .nonconformist import RegressorAdapter, IcpRegressor, RegressorNc, RegressorNormalizer, QuantileRegErrFunc
 
 try:
     from xgboost import XGBRegressor
@@ -41,6 +40,12 @@ class GBDTRegressor(GBDT, RegressorMixin):
 
         colsample: float
             percentage of features to use at each node split
+        
+        level: float
+            confidence level for prediction sets
+
+        pi_method: str
+            method for constructing the prediction intervals: 'splitconformal', 'localconformal'
 
         verbose: int
             controls verbosity (default=0)
@@ -90,7 +95,6 @@ class GBDTRegressor(GBDT, RegressorMixin):
         print(f"Regression Mean Squared Error lightgbm: {mse3:.2f}")
         ```
     """
-
     def __init__(
         self,
         model_type="xgboost",
@@ -99,12 +103,14 @@ class GBDTRegressor(GBDT, RegressorMixin):
         max_depth=3,
         rowsample=1.0,
         colsample=1.0,
+        level=None,
+        pi_method="splitconformal",
         verbose=0,
         seed=123,
         **kwargs,
     ):
 
-        self.type_fit = "regression"
+        self.type_fit = "regression"        
 
         super().__init__(
             model_type=model_type,
@@ -113,18 +119,43 @@ class GBDTRegressor(GBDT, RegressorMixin):
             max_depth=max_depth,
             rowsample=rowsample,
             colsample=colsample,
+            level=level,
+            pi_method=pi_method,
             verbose=verbose,
             seed=seed,
             **kwargs,
         )
 
-        if model_type == "xgboost":
-            self.model = XGBRegressor(**self.params)
-        elif model_type == "catboost":
-            self.model = CatBoostRegressor(**self.params)
-        elif model_type == "lightgbm":
-            self.model = LGBMRegressor(**self.params)
-        elif model_type == "gradientboosting":
-            self.model = GradientBoostingRegressor(**self.params)
-        else:
-            raise ValueError(f"Unknown model_type: {model_type}")
+        if self.level is not None:
+
+            if model_type == "xgboost":
+                self.model = PredictionInterval(XGBRegressor(**self.params), 
+                                                level=self.level, 
+                                                method=self.pi_method)
+            elif model_type == "catboost":
+                self.model = PredictionInterval(CatBoostRegressor(**self.params), 
+                                                level=self.level, 
+                                                method=self.pi_method)
+            elif model_type == "lightgbm":
+                self.model = PredictionInterval(LGBMRegressor(**self.params), 
+                                                level=self.level, 
+                                                method=self.pi_method)
+            elif model_type == "gradientboosting":
+                self.model = PredictionInterval(GradientBoostingRegressor(**self.params), 
+                                                level=self.level, 
+                                                method=self.pi_method)
+            else:
+                raise ValueError(f"Unknown model_type: {model_type}")
+            
+        else:     
+            
+            if model_type == "xgboost":
+                self.model = XGBRegressor(**self.params)
+            elif model_type == "catboost":
+                self.model = CatBoostRegressor(**self.params)
+            elif model_type == "lightgbm":
+                self.model = LGBMRegressor(**self.params)
+            elif model_type == "gradientboosting":
+                self.model = GradientBoostingRegressor(**self.params)
+            else:
+                raise ValueError(f"Unknown model_type: {model_type}")

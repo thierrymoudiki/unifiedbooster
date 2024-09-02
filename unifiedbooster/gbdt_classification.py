@@ -1,6 +1,6 @@
 from .gbdt import GBDT
 from sklearn.base import ClassifierMixin
-from .nonconformist import ClassifierAdapter, IcpClassifier, TcpClassifier, MarginErrFunc   
+from .predictionset import PredictionSet
 
 try:
     from xgboost import XGBClassifier
@@ -40,6 +40,12 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
         colsample: float
             percentage of features to use at each node split
+        
+        level: float
+            confidence level for prediction sets
+        
+        pi_method: str
+            method for constructing the prediction intervals: 'icp' (inductive conformal), 'tcp' (transductive conformal)
 
         verbose: int
             controls verbosity (default=0)
@@ -89,7 +95,6 @@ class GBDTClassifier(GBDT, ClassifierMixin):
         print(f"Classification Accuracy lightgbm: {accuracy3:.2f}")
         ```
     """
-
     def __init__(
         self,
         model_type="xgboost",
@@ -98,6 +103,8 @@ class GBDTClassifier(GBDT, ClassifierMixin):
         max_depth=3,
         rowsample=1.0,
         colsample=1.0,
+        level=None,
+        pi_method="icp",
         verbose=0,
         seed=123,
         **kwargs,
@@ -112,21 +119,46 @@ class GBDTClassifier(GBDT, ClassifierMixin):
             max_depth=max_depth,
             rowsample=rowsample,
             colsample=colsample,
+            level=level,
+            pi_method=pi_method,
             verbose=verbose,
             seed=seed,
             **kwargs,
         )
 
-        if model_type == "xgboost":
-            self.model = XGBClassifier(**self.params)
-        elif model_type == "catboost":
-            self.model = CatBoostClassifier(**self.params)
-        elif model_type == "lightgbm":
-            self.model = LGBMClassifier(**self.params)
-        elif model_type == "gradientboosting":
-            self.model = GradientBoostingClassifier(**self.params)
+        if self.level is not None:
+
+            if model_type == "xgboost":
+                self.model = PredictionSet(XGBClassifier(**self.params), 
+                                            level=self.level, 
+                                            method=self.pi_method)
+            elif model_type == "catboost":
+                self.model = PredictionSet(CatBoostClassifier(**self.params), 
+                                            level=self.level, 
+                                            method=self.pi_method)
+            elif model_type == "lightgbm":
+                self.model = PredictionSet(LGBMClassifier(**self.params), 
+                                            level=self.level, 
+                                            method=self.pi_method)
+            elif model_type == "gradientboosting":
+                self.model = PredictionSet(GradientBoostingClassifier(**self.params), 
+                                            level=self.level, 
+                                            method=self.pi_method)
+            else:
+                raise ValueError(f"Unknown model_type: {model_type}")
+            
         else:
-            raise ValueError(f"Unknown model_type: {model_type}")
+
+            if model_type == "xgboost":
+                self.model = XGBClassifier(**self.params)
+            elif model_type == "catboost":
+                self.model = CatBoostClassifier(**self.params)
+            elif model_type == "lightgbm":
+                self.model = LGBMClassifier(**self.params)
+            elif model_type == "gradientboosting":
+                self.model = GradientBoostingClassifier(**self.params)
+            else:
+                raise ValueError(f"Unknown model_type: {model_type}")
 
     def predict_proba(self, X):
         """Predict probabilities for test data X.
@@ -144,5 +176,4 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
             probability estimates for test data: {array-like}
         """
-
         return self.model.predict_proba(X)
