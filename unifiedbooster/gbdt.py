@@ -35,6 +35,7 @@ class GBDT(BaseEstimator):
         **kwargs: dict
             additional parameters to be passed to the class
     """
+
     def __init__(
         self,
         model_type="xgboost",

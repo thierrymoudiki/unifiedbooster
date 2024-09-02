@@ -8,7 +8,13 @@ from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import gaussian_kde
 from tqdm import tqdm
-from ..nonconformist import ClassifierAdapter, IcpClassifier, TcpClassifier, ClassifierNc, MarginErrFunc
+from ..nonconformist import (
+    ClassifierAdapter,
+    IcpClassifier,
+    TcpClassifier,
+    ClassifierNc,
+    MarginErrFunc,
+)
 
 
 class PredictionSet(BaseEstimator, ClassifierMixin):
@@ -47,21 +53,18 @@ class PredictionSet(BaseEstimator, ClassifierMixin):
             self.alpha_ = 1 - self.level / 100
         self.quantile_ = None
         self.icp_ = None
-        self.tcp_ = None        
+        self.tcp_ = None
 
         if self.method == "icp":
-            self.icp_ = IcpClassifier(                
+            self.icp_ = IcpClassifier(
                 ClassifierNc(ClassifierAdapter(self.obj), MarginErrFunc()),
             )
         elif self.method == "tcp":
-            self.tcp_ = TcpClassifier(                
+            self.tcp_ = TcpClassifier(
                 ClassifierNc(ClassifierAdapter(self.obj), MarginErrFunc()),
-            )            
-        else:
-            raise ValueError(
-                "`self.method` must be in ('icp', 'tcp')"
             )
-           
+        else:
+            raise ValueError("`self.method` must be in ('icp', 'tcp')")
 
     def fit(self, X, y):
         """Fit the `method` to training data (X, y).
@@ -74,13 +77,14 @@ class PredictionSet(BaseEstimator, ClassifierMixin):
 
             y: array-like, shape = [n_samples, ]; Target values.
 
-        """        
+        """
         if self.method == "icp":
 
             X_train, X_calibration, y_train, y_calibration = train_test_split(
-            X, y, test_size=0.5, random_state=self.seed)
+                X, y, test_size=0.5, random_state=self.seed
+            )
             self.icp_.fit(X_train, y_train)
-            self.icp_.calibrate(X_calibration, y_calibration)  
+            self.icp_.calibrate(X_calibration, y_calibration)
 
         elif self.method == "tcp":
 
@@ -101,11 +105,9 @@ class PredictionSet(BaseEstimator, ClassifierMixin):
 
         if self.method == "icp":
             return self.icp_.predict(X, significance=self.alpha_)
-        
+
         elif self.method == "tcp":
             return self.tcp_.predict(X, significance=self.alpha_)
-        
+
         else:
-            raise ValueError(
-                "`self.method` must be in ('icp', 'tcp')"
-            )
+            raise ValueError("`self.method` must be in ('icp', 'tcp')")

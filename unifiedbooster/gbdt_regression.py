@@ -40,7 +40,7 @@ class GBDTRegressor(GBDT, RegressorMixin):
 
         colsample: float
             percentage of features to use at each node split
-        
+
         level: float
             confidence level for prediction sets
 
@@ -95,6 +95,7 @@ class GBDTRegressor(GBDT, RegressorMixin):
         print(f"Regression Mean Squared Error lightgbm: {mse3:.2f}")
         ```
     """
+
     def __init__(
         self,
         model_type="xgboost",
@@ -110,7 +111,7 @@ class GBDTRegressor(GBDT, RegressorMixin):
         **kwargs,
     ):
 
-        self.type_fit = "regression"        
+        self.type_fit = "regression"
 
         super().__init__(
             model_type=model_type,
@@ -129,26 +130,34 @@ class GBDTRegressor(GBDT, RegressorMixin):
         if self.level is not None:
 
             if model_type == "xgboost":
-                self.model = PredictionInterval(XGBRegressor(**self.params), 
-                                                level=self.level, 
-                                                method=self.pi_method)
+                self.model = PredictionInterval(
+                    XGBRegressor(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             elif model_type == "catboost":
-                self.model = PredictionInterval(CatBoostRegressor(**self.params), 
-                                                level=self.level, 
-                                                method=self.pi_method)
+                self.model = PredictionInterval(
+                    CatBoostRegressor(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             elif model_type == "lightgbm":
-                self.model = PredictionInterval(LGBMRegressor(**self.params), 
-                                                level=self.level, 
-                                                method=self.pi_method)
+                self.model = PredictionInterval(
+                    LGBMRegressor(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             elif model_type == "gradientboosting":
-                self.model = PredictionInterval(GradientBoostingRegressor(**self.params), 
-                                                level=self.level, 
-                                                method=self.pi_method)
+                self.model = PredictionInterval(
+                    GradientBoostingRegressor(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             else:
                 raise ValueError(f"Unknown model_type: {model_type}")
-            
-        else:     
-            
+
+        else:
+
             if model_type == "xgboost":
                 self.model = XGBRegressor(**self.params)
             elif model_type == "catboost":

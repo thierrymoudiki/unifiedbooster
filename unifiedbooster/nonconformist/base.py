@@ -108,7 +108,7 @@ class ClassifierAdapter(BaseModelAdapter, ClassifierMixin):
 
     def _underlying_predict(self, x):
         return self.model.predict_proba(x)
-    
+
 
 class RegressorAdapter(BaseModelAdapter, RegressorMixin):
     def __init__(self, model, fit_params=None):

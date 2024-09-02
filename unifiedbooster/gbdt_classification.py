@@ -40,10 +40,10 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
         colsample: float
             percentage of features to use at each node split
-        
+
         level: float
             confidence level for prediction sets
-        
+
         pi_method: str
             method for constructing the prediction intervals: 'icp' (inductive conformal), 'tcp' (transductive conformal)
 
@@ -95,6 +95,7 @@ class GBDTClassifier(GBDT, ClassifierMixin):
         print(f"Classification Accuracy lightgbm: {accuracy3:.2f}")
         ```
     """
+
     def __init__(
         self,
         model_type="xgboost",
@@ -129,24 +130,32 @@ class GBDTClassifier(GBDT, ClassifierMixin):
         if self.level is not None:
 
             if model_type == "xgboost":
-                self.model = PredictionSet(XGBClassifier(**self.params), 
-                                            level=self.level, 
-                                            method=self.pi_method)
+                self.model = PredictionSet(
+                    XGBClassifier(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             elif model_type == "catboost":
-                self.model = PredictionSet(CatBoostClassifier(**self.params), 
-                                            level=self.level, 
-                                            method=self.pi_method)
+                self.model = PredictionSet(
+                    CatBoostClassifier(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             elif model_type == "lightgbm":
-                self.model = PredictionSet(LGBMClassifier(**self.params), 
-                                            level=self.level, 
-                                            method=self.pi_method)
+                self.model = PredictionSet(
+                    LGBMClassifier(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             elif model_type == "gradientboosting":
-                self.model = PredictionSet(GradientBoostingClassifier(**self.params), 
-                                            level=self.level, 
-                                            method=self.pi_method)
+                self.model = PredictionSet(
+                    GradientBoostingClassifier(**self.params),
+                    level=self.level,
+                    method=self.pi_method,
+                )
             else:
                 raise ValueError(f"Unknown model_type: {model_type}")
-            
+
         else:
 
             if model_type == "xgboost":
