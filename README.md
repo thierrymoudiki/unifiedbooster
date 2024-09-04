@@ -7,7 +7,9 @@ Unified interface for Gradient Boosted Decision Trees algorithms
 
 ## Examples 
 
-See also https://thierrymoudiki.github.io/blog/2024/08/05/python/r/unibooster
+See also: 
+- Auto XGBoost, Auto LightGBM, Auto CatBoost, Auto GradientBoosting: https://thierrymoudiki.github.io/blog/2024/08/05/python/r/unibooster
+- Prediction sets and prediction intervals for conformalized Auto XGBoost, Auto LightGBM, Auto CatBoost, Auto GradientBoosting: https://thierrymoudiki.github.io/blog/2024/09/02/python/r/conformalized-unibooster
 
 ### classification 
 
