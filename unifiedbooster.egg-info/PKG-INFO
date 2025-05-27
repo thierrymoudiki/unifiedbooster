@@ -1,4 +1,4 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: unifiedbooster
 Version: 0.7.0
 Summary: Unified interface for Gradient Boosted Decision Trees
@@ -25,5 +25,16 @@ Requires-Dist: lightgbm
 Requires-Dist: catboost
 Requires-Dist: GPopt
 Requires-Dist: nnetsauce
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 Unified interface for Gradient Boosted Decision Trees
