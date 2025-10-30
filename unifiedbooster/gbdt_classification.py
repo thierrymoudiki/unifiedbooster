@@ -129,25 +129,25 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
         if self.level is not None:
 
-            if model_type == "xgboost":
+            if model_type in ("xgboost", "xgb"):
                 self.model = PredictionSet(
                     XGBClassifier(**self.params),
                     level=self.level,
                     method=self.pi_method,
                 )
-            elif model_type == "catboost":
+            elif model_type in ("catboost", "cb"):
                 self.model = PredictionSet(
                     CatBoostClassifier(**self.params),
                     level=self.level,
                     method=self.pi_method,
                 )
-            elif model_type == "lightgbm":
+            elif model_type in ("lightgbm", "lgb"):
                 self.model = PredictionSet(
                     LGBMClassifier(**self.params),
                     level=self.level,
                     method=self.pi_method,
                 )
-            elif model_type == "gradientboosting":
+            elif model_type in ("gradientboosting", "gb"):
                 self.model = PredictionSet(
                     GradientBoostingClassifier(**self.params),
                     level=self.level,
@@ -158,13 +158,13 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
         else:
 
-            if model_type == "xgboost":
+            if model_type in ("xgboost", "xgb"):
                 self.model = XGBClassifier(**self.params)
-            elif model_type == "catboost":
+            elif model_type in ("catboost", "cb"):
                 self.model = CatBoostClassifier(**self.params)
-            elif model_type == "lightgbm":
+            elif model_type in ("lightgbm", "lgb"):
                 self.model = LGBMClassifier(**self.params)
-            elif model_type == "gradientboosting":
+            elif model_type in ("gradientboosting", "gb"):
                 self.model = GradientBoostingClassifier(**self.params)
             else:
                 raise ValueError(f"Unknown model_type: {model_type}")
