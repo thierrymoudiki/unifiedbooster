@@ -7,8 +7,6 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-subprocess.check_call(['pip', 'install', 'Cython'])
-
 __version__ = "0.9.0"
 
 here = path.abspath(path.dirname(__file__))
