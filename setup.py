@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-subprocess.check_call(['pip', 'install', 'Cython'])
+# subprocess.check_call(['pip', 'install', 'Cython'])
 
 __version__ = "0.10.0"
 
