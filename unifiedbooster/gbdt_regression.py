@@ -136,8 +136,16 @@ class GBDTRegressor(GBDT, RegressorMixin):
                     method=self.pi_method,
                 )
             elif model_type == "catboost":
+                fast_cb = dict(
+                    thread_count=-1,
+                    boosting_type="Plain",
+                    grow_policy="Depthwise",
+                    bootstrap_type="Bernoulli",
+                    subsample=0.8,
+                    verbose=False
+                )
                 self.model = PredictionInterval(
-                    CatBoostRegressor(**self.params),
+                    CatBoostRegressor(**self.params, **fast_cb),
                     level=self.level,
                     method=self.pi_method,
                 )
@@ -161,7 +169,15 @@ class GBDTRegressor(GBDT, RegressorMixin):
             if model_type == "xgboost":
                 self.model = XGBRegressor(**self.params)
             elif model_type == "catboost":
-                self.model = CatBoostRegressor(**self.params)
+                fast_cb = dict(
+                    thread_count=-1,
+                    boosting_type="Plain",
+                    grow_policy="Depthwise",
+                    bootstrap_type="Bernoulli",
+                    subsample=0.8,
+                    verbose=False
+                )
+                self.model = CatBoostRegressor(**self.params, **fast_cb)
             elif model_type == "lightgbm":
                 self.model = LGBMRegressor(**self.params)
             elif model_type == "gradientboosting":

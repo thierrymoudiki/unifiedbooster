@@ -136,8 +136,18 @@ class GBDTClassifier(GBDT, ClassifierMixin):
                     method=self.pi_method,
                 )
             elif model_type == "catboost":
+
+                fast_cb = dict(
+                    thread_count=-1,
+                    boosting_type="Plain",
+                    grow_policy="Depthwise",
+                    bootstrap_type="Bernoulli",
+                    subsample=0.8,
+                    verbose=False
+                )
+
                 self.model = PredictionSet(
-                    CatBoostClassifier(**self.params),
+                    CatBoostClassifier(**self.params, **fast_cb),
                     level=self.level,
                     method=self.pi_method,
                 )
@@ -161,7 +171,15 @@ class GBDTClassifier(GBDT, ClassifierMixin):
             if model_type == "xgboost":
                 self.model = XGBClassifier(**self.params)
             elif model_type == "catboost":
-                self.model = CatBoostClassifier(**self.params)
+                fast_cb = dict(
+                    thread_count=-1,
+                    boosting_type="Plain",
+                    grow_policy="Depthwise",
+                    bootstrap_type="Bernoulli",
+                    subsample=0.8,
+                    verbose=False
+                )
+                self.model = CatBoostClassifier(**self.params, **fast_cb)
             elif model_type == "lightgbm":
                 self.model = LGBMClassifier(**self.params)
             elif model_type == "gradientboosting":
