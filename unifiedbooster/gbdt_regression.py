@@ -46,6 +46,10 @@ class GBDTRegressor(GBDT, RegressorMixin):
 
         pi_method: str
             method for constructing the prediction intervals: 'splitconformal', 'localconformal'
+        
+        type_split: a string;
+            Only if `level` is not `None`
+            "random" (random split of data) or "sequential" (sequential split of data)
 
         verbose: int
             controls verbosity (default=0)
@@ -106,12 +110,14 @@ class GBDTRegressor(GBDT, RegressorMixin):
         colsample=1.0,
         level=None,
         pi_method="splitconformal",
+        type_split="random",
         verbose=0,
         seed=123,
         **kwargs,
     ):
 
         self.type_fit = "regression"
+        self.type_split = type_split 
 
         super().__init__(
             model_type=model_type,
@@ -129,11 +135,12 @@ class GBDTRegressor(GBDT, RegressorMixin):
 
         if self.level is not None:
 
-            if model_type == "xgboost":
+            if model_type in ("xgboost", "xgb"):
                 self.model = PredictionInterval(
                     XGBRegressor(**self.params),
                     level=self.level,
                     method=self.pi_method,
+                    type_split=self.type_split
                 )
             elif model_type == "catboost":
                 fast_cb = dict(
@@ -148,26 +155,30 @@ class GBDTRegressor(GBDT, RegressorMixin):
                     CatBoostRegressor(**self.params, **fast_cb),
                     level=self.level,
                     method=self.pi_method,
+                    type_split=self.type_split
                 )
-            elif model_type == "lightgbm":
+            elif model_type in ("lightgbm", "lgb"):
                 self.model = PredictionInterval(
                     LGBMRegressor(**self.params),
                     level=self.level,
                     method=self.pi_method,
+                    type_split=self.type_split
                 )
-            elif model_type == "gradientboosting":
+            elif model_type in ("gradientboosting", "gb"):
                 self.model = PredictionInterval(
                     GradientBoostingRegressor(**self.params),
                     level=self.level,
                     method=self.pi_method,
+                    type_split=self.type_split
                 )
             else:
                 raise ValueError(f"Unknown model_type: {model_type}")
 
         else:
 
-            if model_type == "xgboost":
+            if model_type in ("xgboost", "xgb"):
                 self.model = XGBRegressor(**self.params)
+<<<<<<< HEAD
             elif model_type == "catboost":
                 fast_cb = dict(
                     thread_count=-1,
@@ -179,8 +190,13 @@ class GBDTRegressor(GBDT, RegressorMixin):
                 )
                 self.model = CatBoostRegressor(**self.params, **fast_cb)
             elif model_type == "lightgbm":
+=======
+            elif model_type in ("catboost", "cb"):
+                self.model = CatBoostRegressor(**self.params)
+            elif model_type in ("lightgbm", "lgb"):
+>>>>>>> 0c97427b8cbd66d509a3cc24747eeea8b157779d
                 self.model = LGBMRegressor(**self.params)
-            elif model_type == "gradientboosting":
+            elif model_type in ("gradientboosting", "gb"):
                 self.model = GradientBoostingRegressor(**self.params)
             else:
                 raise ValueError(f"Unknown model_type: {model_type}")
