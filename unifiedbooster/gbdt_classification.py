@@ -170,7 +170,6 @@ class GBDTClassifier(GBDT, ClassifierMixin):
 
             if model_type in ("xgboost", "xgb"):
                 self.model = XGBClassifier(**self.params)
-<<<<<<< HEAD
             elif model_type == "catboost":
                 fast_cb = dict(
                     thread_count=-1,
@@ -182,11 +181,6 @@ class GBDTClassifier(GBDT, ClassifierMixin):
                 )
                 self.model = CatBoostClassifier(**self.params, **fast_cb)
             elif model_type == "lightgbm":
-=======
-            elif model_type in ("catboost", "cb"):
-                self.model = CatBoostClassifier(**self.params)
-            elif model_type in ("lightgbm", "lgb"):
->>>>>>> 0c97427b8cbd66d509a3cc24747eeea8b157779d
                 self.model = LGBMClassifier(**self.params)
             elif model_type in ("gradientboosting", "gb"):
                 self.model = GradientBoostingClassifier(**self.params)
